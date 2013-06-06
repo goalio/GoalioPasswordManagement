@@ -8,4 +8,6 @@ class PasswordChange extends AbstractDbMapper
 {
     protected $tableName  = 'user_login_password_change';
 
+
+
 }

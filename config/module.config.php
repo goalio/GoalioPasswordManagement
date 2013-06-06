@@ -14,7 +14,7 @@ return array(
         'routes' => array(
             'zfcuser' => array(
                 'child_routes' => array(
-                    'changepassword' => array(
+                    'forcepasswordchange' => array(
                         'type' => 'Segment',
                         'options' => array(
                             'route' => '/change-password/:userId/:token',

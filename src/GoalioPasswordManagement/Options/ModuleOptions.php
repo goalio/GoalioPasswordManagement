@@ -32,6 +32,12 @@ class ModuleOptions extends AbstractOptions
     protected $blockLoginAfterFailedAttempts = null;
 
     /**
+     * @var array
+     */
+    protected $changePasswordRoutes = array('zfcuser/changepassword');
+
+
+    /**
      * @param int|null $blockLoginAfterFailedAttempts
      *
      * @return $this
@@ -120,6 +126,25 @@ class ModuleOptions extends AbstractOptions
     public function getLoginPasswordChangeEntityClass() {
         return $this->loginPasswordChangeEntityClass;
     }
+
+    /**
+     * @param array $changePasswordRoutes
+     *
+     * @return $this
+     */
+    public function setChangePasswordRoutes($changePasswordRoutes) {
+        $this->changePasswordRoutes = $changePasswordRoutes;
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getChangePasswordRoutes() {
+        return $this->changePasswordRoutes;
+    }
+
 
 
 

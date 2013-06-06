@@ -30,10 +30,23 @@ class Module {
             ),
 
             'factories' => array(
+                'goaliopasswordmanagement_password_service' => function($sl) {
+                    $service = new Service\PasswordManagementService();
+                    $service->setPasswordMapper($sl->get('goaliopasswordmanagement_passwordchange_mapper'));
+
+                    return $service;
+                },
 
                 'goaliopasswordmanagement_module_options' => function ($sm) {
                     $config = $sm->get('Config');
                     return new Options\ModuleOptions(isset($config['goaliopasswordmanagement']) ? $config['goaliopasswordmanagement'] : array());
+                },
+
+                'goaliopasswordmanagement_change_form' => function($sm) {
+                    $options = $sm->get('goaliopasswordmanagement_module_options');
+                    $form = new Form\Change(null, $options);
+                    $form->setInputFilter(new Form\ChangeFilter($options));
+                    return $form;
                 },
 
                 'goaliopasswordmanagement_loginattempt_mapper' => function ($sm) {
@@ -51,18 +64,26 @@ class Module {
     }
 
     public function onBootstrap(MvcEvent $event) {
-//        $eventManager = $event->getApplication()->getEventManager();
-//        $eventManager->attach(MvcEvent::EVENT_DISPATCH, function(MvcEvent $event) {
-//            $routeMatch = $event->getRouteMatch();
-//
-//
-//            $routeMatch->setParam('controller', 'foo');
-//            $routeMatch->setParam('action', 'bar');
-//
-//
-//        }, -100);
+        $eventManager = $event->getApplication()->getEventManager();
+        $eventManager->attach(MvcEvent::EVENT_DISPATCH, function(MvcEvent $event) {
 
+            /** @var \Zend\ServiceManager\ServiceLocatorInterface $serviceManager */
+            $serviceManager = $event->getApplication()->getServiceManager();
 
+            $authService = $serviceManager->get('zfcuser_auth_service');
+
+            if($authService->hasIdentity() === true) {
+                $options = $serviceManager->get('goaliopasswordmanagement_module_options');
+                $changeService = $serviceManager->get('goaliopasswordmanagement_password_service');
+                $routeMatch = $event->getRouteMatch();
+                $identity = $authService->getIdentity();
+
+                if(!in_array($routeMatch->getMatchedRouteName(), $options->getChangePasswordRoutes())&& $changeService->hasToChangePassword($identity)) {
+                    $routeMatch->setParam('controller', 'goaliopasswordmanagement_change');
+                    $routeMatch->setParam('action', 'forcechange');
+                }
+            }
+        }, 9999);
     }
 }
 
