@@ -36,6 +36,8 @@ class ModuleOptions extends AbstractOptions
      */
     protected $changePasswordRoutes = array('zfcuser/changepassword');
 
+    /** @var integer */
+    protected $autoLogin = null;
 
     /**
      * @param int|null $blockLoginAfterFailedAttempts
@@ -144,6 +146,26 @@ class ModuleOptions extends AbstractOptions
     public function getChangePasswordRoutes() {
         return $this->changePasswordRoutes;
     }
+
+    /**
+     * @param int $autoLogin
+     *
+     * @return $this
+     */
+    public function setAutoLogin($autoLogin) {
+        $this->autoLogin = $autoLogin;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getAutoLogin() {
+        return $this->autoLogin;
+    }
+
+
 
 
 

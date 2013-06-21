@@ -25,6 +25,7 @@ class Module {
     public function getServiceConfig() {
         return array(
             'invokables' => array(
+                'GoalioPasswordManagement\Authentication\Adapter\AutoLogin'           => 'GoalioPasswordManagement\Authentication\Adapter\AutoLogin',
                 'GoalioPasswordManagement\Authentication\Adapter\LoginAttempt'        => 'GoalioPasswordManagement\Authentication\Adapter\LoginAttempt',
                 'GoalioPasswordManagement\Authentication\Adapter\LoginChangePassword' => 'GoalioPasswordManagement\Authentication\Adapter\LoginChangePassword',
             ),
@@ -84,6 +85,19 @@ class Module {
                 }
             }
         }, 9999);
+
+        /** @var \Zend\ServiceManager\ServiceLocatorInterface $serviceManager */
+        $serviceManager = $event->getApplication()->getServiceManager();
+        $options = $serviceManager->get('goaliopasswordmanagement_module_options');
+
+        if($options->getAutoLogin() !== null) {
+            $adapter = $event->getApplication()->getServiceManager()->get('ZfcUser\Authentication\Adapter\AdapterChain');
+            $adapter->prepareForAuthentication($event->getRequest());
+            $authService = $event->getApplication()->getServiceManager()->get('zfcuser_auth_service');
+
+            $auth = $authService->authenticate($adapter);
+        }
+
     }
 }
 
