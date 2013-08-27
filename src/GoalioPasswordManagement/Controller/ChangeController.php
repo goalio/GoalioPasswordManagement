@@ -35,7 +35,7 @@ class ChangeController extends AbstractActionController
 
     public function forcechangeAction() {
         if (!$this->zfcUserAuthentication()->hasIdentity()) {
-            return $this->redirect()->toRoute(static::ROUTE_LOGIN);
+            return $this->redirect()->toRoute(UserController::ROUTE_LOGIN);
         }
 
         $identity = $this->zfcUserAuthentication()->getIdentity();

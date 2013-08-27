@@ -5,6 +5,7 @@ use Zend\Loader\StandardAutoloader;
 use Zend\Loader\AutoloaderFactory;
 use Zend\Mvc\MvcEvent;
 use Zend\Stdlib\Hydrator\ClassMethods;
+use Zend\Console\Request as ConsoleRequest;
 
 class Module {
 
@@ -79,7 +80,7 @@ class Module {
                 $routeMatch = $event->getRouteMatch();
                 $identity = $authService->getIdentity();
 
-                if(!in_array($routeMatch->getMatchedRouteName(), $options->getChangePasswordRoutes())&& $changeService->hasToChangePassword($identity)) {
+                if(!in_array($routeMatch->getMatchedRouteName(), $options->getChangePasswordRoutes()) && $changeService->hasToChangePassword($identity)) {
                     $routeMatch->setParam('controller', 'goaliopasswordmanagement_change');
                     $routeMatch->setParam('action', 'forcechange');
                 }
@@ -90,14 +91,18 @@ class Module {
         $serviceManager = $event->getApplication()->getServiceManager();
         $options = $serviceManager->get('goaliopasswordmanagement_module_options');
 
-        if($options->getAutoLogin() !== null) {
-            $adapter = $event->getApplication()->getServiceManager()->get('ZfcUser\Authentication\Adapter\AdapterChain');
-            $adapter->prepareForAuthentication($event->getRequest());
+
+        if($options->getAutoLogin() !== null && !($event->getRequest() instanceof ConsoleRequest)) {
             $authService = $event->getApplication()->getServiceManager()->get('zfcuser_auth_service');
 
-            $auth = $authService->authenticate($adapter);
-        }
+            if(!$authService->hasIdentity()) {
+                $adapter = $event->getApplication()->getServiceManager()->get('ZfcUser\Authentication\Adapter\AdapterChain');
+                $adapter->prepareForAuthentication($event->getRequest());
 
+
+                $auth = $authService->authenticate($adapter);
+            }
+        }
     }
 }
 

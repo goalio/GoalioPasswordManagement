@@ -17,14 +17,14 @@ return array(
                     'forcepasswordchange' => array(
                         'type' => 'Segment',
                         'options' => array(
-                            'route' => '/change-password/:userId/:token',
+                            'route' => '/login-change-password/:userId/:token',
                             'defaults' => array(
                                 'controller' => 'goaliopasswordmanagement_change',
                                 'action'     => 'change',
                             ),
                             'constraints' => array(
-                                'userId'  => '[A-Fa-f0-9]+',
-                                'token' => '[A-F0-9]+',
+                                'userId'  => '[0-9]+',
+                                'token' => '[a-fA-F0-9]+',
                             ),
                         ),
                     ),
