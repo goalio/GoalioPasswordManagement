@@ -91,16 +91,14 @@ class Module {
         $serviceManager = $event->getApplication()->getServiceManager();
         $options = $serviceManager->get('goaliopasswordmanagement_module_options');
 
-
-        if($options->getAutoLogin() !== null && !($event->getRequest() instanceof ConsoleRequest)) {
+        if($options->getAutoLogin() !== null && (!($event->getRequest() instanceof ConsoleRequest) || $options->getAutoLoginInConsole() === true)) {
             $authService = $event->getApplication()->getServiceManager()->get('zfcuser_auth_service');
 
             if(!$authService->hasIdentity()) {
                 $adapter = $event->getApplication()->getServiceManager()->get('ZfcUser\Authentication\Adapter\AdapterChain');
                 $adapter->prepareForAuthentication($event->getRequest());
 
-
-                $auth = $authService->authenticate($adapter);
+                $authService->authenticate();
             }
         }
     }

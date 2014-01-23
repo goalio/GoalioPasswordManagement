@@ -43,6 +43,11 @@ class AutoLogin extends AbstractAdapter implements ServiceLocatorAwareInterface 
             $this->getStorage()->write($storage);
             $e->setCode(AuthenticationResult::SUCCESS)
                 ->setMessages(array('Authentication successful.'));
+
+            // Terminate AdapterChain early. In console ZfcUser DB adapter does not work
+            if($options->getAutoLoginTerminateChain() === true) {
+                return new \Zend\Stdlib\Response();
+            }
         }
     }
 

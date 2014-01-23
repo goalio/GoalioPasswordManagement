@@ -39,6 +39,12 @@ class ModuleOptions extends AbstractOptions
     /** @var integer */
     protected $autoLogin = null;
 
+    /** @var boolean */
+    protected $autoLoginInConsole = false;
+
+    /** @var boolean */
+    protected $autoLoginTerminateChain = false;
+
     /**
      * @param int|null $blockLoginAfterFailedAttempts
      *
@@ -165,8 +171,41 @@ class ModuleOptions extends AbstractOptions
         return $this->autoLogin;
     }
 
+    /**
+     * @param boolean $autoLoginInConsole
+     *
+     * @return $this
+     */
+    public function setAutoLoginInConsole($autoLoginInConsole) {
+        $this->autoLoginInConsole = $autoLoginInConsole;
 
+        return $this;
+    }
 
+    /**
+     * @return boolean
+     */
+    public function getAutoLoginInConsole() {
+        return $this->autoLoginInConsole;
+    }
+
+    /**
+     * @param boolean $autoLoginTerminateChain
+     *
+     * @return $this
+     */
+    public function setAutoLoginTerminateChain($autoLoginTerminateChain) {
+        $this->autoLoginTerminateChain = $autoLoginTerminateChain;
+
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getAutoLoginTerminateChain() {
+        return $this->autoLoginTerminateChain;
+    }
 
 
 
