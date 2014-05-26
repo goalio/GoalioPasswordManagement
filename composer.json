@@ -2,6 +2,7 @@
     "name": "goalio/goalio-passwordmanagement",
     "description": "Adding additional functionalitiy to ZfcUser",
     "type": "library",
+    "license": "BSD-3-Clause",
     "keywords": [
         "zf2",
         "zfcuser"
