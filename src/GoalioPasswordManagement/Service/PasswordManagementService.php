@@ -35,6 +35,7 @@ class PasswordManagementService extends EventProvider implements ServiceLocatorA
 
         $pass = $bcrypt->create($newPass);
         $user->setPassword($pass);
+        $user->setChangePasswordOnLogin(false);
 
         $this->getEventManager()->trigger(__FUNCTION__, $this, array('user' => $user));
         $this->getUserMapper()->update($user);
