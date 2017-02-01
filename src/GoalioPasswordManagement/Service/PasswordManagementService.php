@@ -30,11 +30,7 @@ class PasswordManagementService extends EventProvider implements ServiceLocatorA
     {
         $newPass = $data['newCredential'];
 
-        $bcrypt = new Bcrypt();
-        $bcrypt->setCost($this->getZfcUserOptions()->getPasswordCost());
-
-        $pass = $bcrypt->create($newPass);
-        $user->setPassword($pass);
+        $user->setPassword($newPass);
         $user->setChangePasswordOnLogin(false);
 
         $this->getEventManager()->trigger(__FUNCTION__, $this, array('user' => $user));
